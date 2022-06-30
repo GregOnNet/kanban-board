@@ -17,8 +17,8 @@ export const Board = component$(() => {
   return (
     <Host class="kanban-board">
       <TodoList heading="ToDo" store={todoStore}></TodoList>
-      <TodoList heading="Done" store={doingStore}></TodoList>
       <TodoList heading="Doing" store={doneStore}></TodoList>
+      <TodoList heading="Done" store={doingStore}></TodoList>
     </Host>
   );
 });
