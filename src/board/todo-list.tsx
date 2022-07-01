@@ -23,6 +23,7 @@ export const TodoList = component$((props: TodoListProps) => {
       <h3>{props.heading}</h3>
       {boardTodos[props.group].map(todo => (
         <TodoCard
+          key={todo.id}
           todo={todo}
           onClickRemove$={async () => await removeTodoFromList.invoke(todo)}
         ></TodoCard>
