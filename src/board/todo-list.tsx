@@ -1,16 +1,19 @@
-import { $, component$, Host, QRL } from '@builder.io/qwik';
+import { $, component$, Host, useContext } from '@builder.io/qwik';
+import { BoardTodosContext } from './BoardTodosContext';
 import { TodoCard } from './todo-card';
 import { Todo } from './todo.model';
+import { todoGroup } from './todoGroup';
 
 interface TodoListProps {
   heading: string;
-  store: { entities: Todo[] };
-  onTodoRemoveQrl?: QRL<(todo: Todo) => void>;
+  group: todoGroup;
 }
 
 export const TodoList = component$((props: TodoListProps) => {
+  const boardTodos = useContext(BoardTodosContext);
+
   const removeTodoFromList = $((todo: Todo) => {
-    props.store.entities = props.store.entities.filter(
+    boardTodos[props.group] = boardTodos[props.group].filter(
       entry => entry?.id !== todo.id
     );
   });
@@ -18,7 +21,7 @@ export const TodoList = component$((props: TodoListProps) => {
   return (
     <Host>
       <h3>{props.heading}</h3>
-      {props.store.entities.map(todo => (
+      {boardTodos[props.group].map(todo => (
         <TodoCard
           todo={todo}
           onClickRemove$={async () => await removeTodoFromList.invoke(todo)}
