@@ -9,7 +9,6 @@ export interface CardProps {
 export const TodoCard = component$(({ card, onClickRemoveQrl }: CardProps) => {
   return (
     <Host class="todo-card">
-      {JSON.stringify(card)}
       <p>{card.text}</p>
       <small onClick$={async () => await onClickRemoveQrl?.invoke(card)}>
         DELETE
