@@ -1,18 +1,19 @@
 import { component$, Host, QRL } from '@builder.io/qwik';
-import { Todo } from './todo.model';
+import { Card } from './models';
 
-export interface TodoCardProps {
-  todo: Todo;
-  onClickRemoveQrl?: QRL<() => void>;
+export interface CardProps {
+  card: Card;
+  onClickRemoveQrl?: QRL<(card: Card) => void>;
 }
 
-export const TodoCard = component$(
-  ({ todo, onClickRemoveQrl }: TodoCardProps) => {
-    return (
-      <Host class="todo-card">
-        <p>{todo.text}</p>
-        <small onClickQrl={onClickRemoveQrl}>DELETE</small>
-      </Host>
-    );
-  }
-);
+export const TodoCard = component$(({ card, onClickRemoveQrl }: CardProps) => {
+  return (
+    <Host class="todo-card">
+      {JSON.stringify(card)}
+      <p>{card.text}</p>
+      <small onClick$={async () => await onClickRemoveQrl?.invoke(card)}>
+        DELETE
+      </small>
+    </Host>
+  );
+});

@@ -1,31 +1,45 @@
-import { $, component$, Host, useContext } from '@builder.io/qwik';
-import { BoardTodosContext } from './BoardTodosContext';
+import {
+  $,
+  component$,
+  Host,
+  useServerMount$,
+  useStore
+} from '@builder.io/qwik';
+import { findCardsByList, removeCard } from './api';
+import { Card, List } from './models';
 import { TodoCard } from './todo-card';
-import { Todo } from './todo.model';
-import { todoGroup } from './todoGroup';
 
-interface TodoListProps {
-  heading: string;
-  group: todoGroup;
+interface ListState {
+  cards: Card[];
 }
 
-export const TodoList = component$((props: TodoListProps) => {
-  const boardTodos = useContext(BoardTodosContext);
+interface ListProps {
+  list: List;
+}
 
-  const removeTodoFromList = $((todo: Todo) => {
-    boardTodos[props.group] = boardTodos[props.group].filter(
-      entry => entry?.id !== todo.id
-    );
+export const TodoList = component$((props: ListProps) => {
+  const store = useStore<ListState>({
+    cards: []
+  });
+
+  useServerMount$(async () => {
+    store.cards = await findCardsByList(props.list);
+  });
+
+  const removeTodoFromList = $(async (card: Card) => {
+    await removeCard(card);
   });
 
   return (
     <Host>
-      <h3>{props.heading}</h3>
-      {boardTodos[props.group].map(todo => (
+      <h3>{props.list.title}</h3>
+      {store.cards.map(card => (
         <TodoCard
-          key={todo.id}
-          todo={todo}
-          onClickRemove$={async () => await removeTodoFromList.invoke(todo)}
+          key={card.id}
+          card={card}
+          onClickRemove$={async cardForRemoval =>
+            await removeTodoFromList.invoke(cardForRemoval)
+          }
         ></TodoCard>
       ))}
     </Host>

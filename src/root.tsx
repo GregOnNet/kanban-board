@@ -1,4 +1,4 @@
-import { Board } from './board/board';
+import { KanbanBoard } from './board/kanban-board';
 
 import './global.css';
 
@@ -10,7 +10,7 @@ export const Root = () => {
         <title>Qwik Board</title>
       </head>
       <body>
-        <Board />
+        <KanbanBoard />
       </body>
     </html>
   );
