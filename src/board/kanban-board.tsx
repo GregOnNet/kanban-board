@@ -20,12 +20,14 @@ export const KanbanBoard = component$(() => {
   });
 
   return (
-    <Host class="kanban-board">
+    <Host>
       <h1>{board.current?.title}</h1>
 
-      {board.lists.map(list => (
-        <TodoList key={list.id} list={list}></TodoList>
-      ))}
+      <div className="kanban-board__lists">
+        {board.lists.map(list => (
+          <TodoList key={list.id} list={list}></TodoList>
+        ))}
+      </div>
     </Host>
   );
 });

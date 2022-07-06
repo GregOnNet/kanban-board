@@ -15,7 +15,7 @@ body {
 }
 
 /* Todo App */
-.kanban-board {
+.kanban-board__lists {
   display: grid;
   grid-auto-columns: 20em;
   grid-auto-flow: column;
