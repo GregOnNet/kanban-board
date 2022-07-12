@@ -30,3 +30,5 @@ export const db = {
   lists,
   cards
 };
+
+console.log(db);

@@ -4,35 +4,48 @@ import {
   Host,
   useServerMount$,
   useStore
-} from '@builder.io/qwik';
-import { findCardsByList, removeCard } from './api';
-import { KanbanBoardListCard } from './kanban-board-list-card';
-import { Card, List } from './models';
+} from '@builder.io/qwik'
+import { createCard, findCardsByList, removeCard } from './api'
+import { KanbanBoardListCard } from './kanban-board-list-card'
+import { KanbanBoardListCardForm } from './kanban-board-list-card-form'
+import { Card, CardDraft, List } from './models'
 
 interface KanbanListState {
-  cards: Card[];
+  cards: Card[]
 }
 
 interface KanbanListProps {
-  list: List;
+  list: List
 }
 
 export const KanbanBoardList = component$((props: KanbanListProps) => {
   const store = useStore<KanbanListState>({
     cards: []
-  });
+  })
 
   useServerMount$(async () => {
-    store.cards = await findCardsByList(props.list);
-  });
+    store.cards = await findCardsByList(props.list)
+  })
 
   const removeTodoFromList = $(async (card: Card) => {
-    await removeCard(card);
-  });
+    await removeCard(card)
+  })
+
+  const createCardFromDraft = $(async (cardDraft: CardDraft) => {
+    await createCard(cardDraft)
+  })
 
   return (
     <Host>
       <h3>{props.list.title}</h3>
+
+      <KanbanBoardListCardForm
+        list={props.list}
+        onClickCreate$={async cardDraft =>
+          await createCardFromDraft.invoke(cardDraft)
+        }
+      ></KanbanBoardListCardForm>
+
       {store.cards.map(card => (
         <KanbanBoardListCard
           key={card.id}
@@ -43,5 +56,5 @@ export const KanbanBoardList = component$((props: KanbanListProps) => {
         ></KanbanBoardListCard>
       ))}
     </Host>
-  );
-});
+  )
+})

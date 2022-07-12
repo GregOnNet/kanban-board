@@ -1,10 +1,10 @@
 import { randUuid } from '@ngneat/falso';
-import { Card, List } from '../models';
+import { Card, CardDraft, List } from '../models';
 
-export async function createCard(card: Card): Promise<Card[]> {
-  card.id = randUuid()
+export async function createCard(cardDraft: CardDraft): Promise<Card[]> {
+  const card: Card = { id: randUuid(), ...cardDraft }
 
-  const response = await fetch(`http://localhost:3030/cards/${card.id}`, { method: 'POST', body: JSON.stringify(card) });
+  const response = await fetch(`http://localhost:3030/cards`, { method: 'POST', body: JSON.stringify(card), headers: { 'Content-Type': 'application/json' } });
 
   return await response.json();
 }
