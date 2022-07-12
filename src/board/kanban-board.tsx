@@ -1,7 +1,7 @@
 import { component$, Host, useServerMount$, useStore } from '@builder.io/qwik';
 import { findListsByBoard, getBoard } from './api';
+import { KanbanBoardList } from './kanban-board-list';
 import { Board, List } from './models';
-import { TodoList } from './todo-list';
 
 interface KanbanBoardState {
   current: Board | null;
@@ -25,7 +25,7 @@ export const KanbanBoard = component$(() => {
 
       <div className="kanban-board__lists">
         {board.lists.map(list => (
-          <TodoList key={list.id} list={list}></TodoList>
+          <KanbanBoardList key={list.id} list={list}></KanbanBoardList>
         ))}
       </div>
     </Host>

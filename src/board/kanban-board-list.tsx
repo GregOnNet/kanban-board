@@ -6,19 +6,19 @@ import {
   useStore
 } from '@builder.io/qwik';
 import { findCardsByList, removeCard } from './api';
+import { KanbanBoardListCard } from './kanban-board-list-card';
 import { Card, List } from './models';
-import { TodoCard } from './todo-card';
 
-interface ListState {
+interface KanbanListState {
   cards: Card[];
 }
 
-interface ListProps {
+interface KanbanListProps {
   list: List;
 }
 
-export const TodoList = component$((props: ListProps) => {
-  const store = useStore<ListState>({
+export const KanbanBoardList = component$((props: KanbanListProps) => {
+  const store = useStore<KanbanListState>({
     cards: []
   });
 
@@ -34,13 +34,13 @@ export const TodoList = component$((props: ListProps) => {
     <Host>
       <h3>{props.list.title}</h3>
       {store.cards.map(card => (
-        <TodoCard
+        <KanbanBoardListCard
           key={card.id}
           card={card}
           onClickRemove$={async cardForRemoval =>
             await removeTodoFromList.invoke(cardForRemoval)
           }
-        ></TodoCard>
+        ></KanbanBoardListCard>
       ))}
     </Host>
   );

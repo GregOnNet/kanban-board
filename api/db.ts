@@ -5,7 +5,7 @@ import {
   randTodo,
   randUuid
 } from '@ngneat/falso';
-import { Board, Card, List } from '../models';
+import { Board, Card, List } from '../src/board/models';
 
 const board: Board = { id: randUuid(), title: randAirportName() };
 

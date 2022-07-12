@@ -1,18 +1,23 @@
+import { randUuid } from '@ngneat/falso';
 import { Card, List } from '../models';
-import { db } from './db';
+
+export async function createCard(card: Card): Promise<Card[]> {
+  card.id = randUuid()
+
+  const response = await fetch(`http://localhost:3030/cards/${card.id}`, { method: 'POST', body: JSON.stringify(card) });
+
+  return await response.json();
+}
 
 export async function findCardsByList(list: List): Promise<Card[]> {
-  const db = await fetch('http://localhost:3000/public/db.json');
-  const body = await db.json();
-  const cards: Card[] = body.cards;
+  const db = await fetch('http://localhost:3030/cards');
+  const cards: Card[] = await db.json();
 
   const cardsOfList = cards.filter(card => card.listId === list.id);
 
-  return Promise.resolve(cardsOfList);
+  return cardsOfList;
 }
 
-export function removeCard(cardForRemoval: Card): Promise<void> {
-  db.cards = db.cards.filter(card => card.id !== cardForRemoval.id);
-
-  return Promise.resolve();
+export async function removeCard(cardForRemoval: Card): Promise<void> {
+  await fetch(`http://localhost:3030/cards/${cardForRemoval.id}`, { method: 'DELETE' });
 }
