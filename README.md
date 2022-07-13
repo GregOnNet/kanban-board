@@ -17,11 +17,11 @@ npm run app:start
 
 > TODO: Reproduce each observation & file an issue.
 
-- When using useMount$ instead of useServerMount the Lists get rendered twice.
 - Mix and Match `useMount$` & `useServerMount$` leads to missing content.
 
 ## Issues
 
+- When using useMount$ instead of useServerMount the Lists get rendered twice. [#762](https://github.com/BuilderIO/qwik/issues/762)
 - When API URL is wrong endless loop of request occurs.[#757](https://github.com/BuilderIO/qwik/issues/757)
 - App works but server throws error. [#753](https://github.com/BuilderIO/qwik/issues/753)
   ```
