@@ -31,7 +31,7 @@ npm run app:start
     at renderMarked (/Users/gregor/workbench/projects/qwik-academy/kanban-playground/node_modules/@builder.io/qwik/core.cjs:3497:25)
   ```
 
-## Whishes
+## Wishes
 
 - More ergonomics working with forms.
 - Guide how to refetch data (Optimistic vs. Pessimistic UI).
