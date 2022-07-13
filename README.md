@@ -20,7 +20,10 @@ npm run app:start
 - When API URL is wrong endless loop of request occurs.
 - When using useMount$ instead of useServerMount the Lists get rendered twice.
 - Mix and Match `useMount$` & `useServerMount$` leads to missing content.
-- App works but server throws error
+
+## Issues
+
+- [App works but server throws error](https://github.com/BuilderIO/qwik/issues/753)
   ```
   QWIK ERROR Error: server can not rerender
     at logError (/Users/gregor/workbench/projects/qwik-academy/kanban-playground/node_modules/@builder.io/qwik/server.cjs:175:52)
