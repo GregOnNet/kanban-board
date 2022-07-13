@@ -1,10 +1,4 @@
-import {
-  $,
-  component$,
-  Host,
-  useServerMount$,
-  useStore
-} from '@builder.io/qwik'
+import { $, component$, Host, useMount$, useStore } from '@builder.io/qwik'
 import { createCard, findCardsByList, removeCard } from './api'
 import { KanbanBoardListCard } from './kanban-board-list-card'
 import { KanbanBoardListCardForm } from './kanban-board-list-card-form'
@@ -23,7 +17,7 @@ export const KanbanBoardList = component$((props: KanbanListProps) => {
     cards: []
   })
 
-  useServerMount$(async () => {
+  useMount$(async () => {
     store.cards = await findCardsByList(props.list)
   })
 

@@ -1,23 +1,23 @@
-import { component$, Host, useServerMount$, useStore } from '@builder.io/qwik';
-import { findListsByBoard, getBoard } from './api';
-import { KanbanBoardList } from './kanban-board-list';
-import { Board, List } from './models';
+import { component$, Host, useMount$, useStore } from '@builder.io/qwik'
+import { findListsByBoard, getBoard } from './api'
+import { KanbanBoardList } from './kanban-board-list'
+import { Board, List } from './models'
 
 interface KanbanBoardState {
-  current: Board | null;
-  lists: List[];
+  current: Board | null
+  lists: List[]
 }
 
 export const KanbanBoard = component$(() => {
   const board = useStore<KanbanBoardState>({
     current: null,
     lists: []
-  });
+  })
 
-  useServerMount$(async () => {
-    board.current = await getBoard();
-    board.lists = await findListsByBoard(board.current);
-  });
+  useMount$(async () => {
+    board.current = await getBoard()
+    board.lists = await findListsByBoard(board.current)
+  })
 
   return (
     <Host>
@@ -29,5 +29,5 @@ export const KanbanBoard = component$(() => {
         ))}
       </div>
     </Host>
-  );
-});
+  )
+})
