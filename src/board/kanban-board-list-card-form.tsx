@@ -1,9 +1,9 @@
-import { component$, Host, QRL, useStore } from '@builder.io/qwik'
+import { component$, Host, PropFunction, useStore } from '@builder.io/qwik'
 import { CardDraft, List } from './models'
 
 export interface CardProps {
   list: List
-  onClickCreateQrl?: QRL<(card: CardDraft) => void>
+  onClickCreate$?: PropFunction<(card: CardDraft) => void>
 }
 
 export const KanbanBoardListCardForm = component$((props: CardProps) => {
@@ -21,9 +21,7 @@ export const KanbanBoardListCardForm = component$((props: CardProps) => {
           (cardDraft.text = (ev.target as HTMLInputElement).value)
         }
       />
-      <button
-        onClick$={async () => await props.onClickCreateQrl?.invoke(cardDraft)}
-      >
+      <button onClick$={async () => await props.onClickCreate$?.(cardDraft)}>
         Create
       </button>
     </Host>
