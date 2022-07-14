@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@builder.io/qwik": "0.0.34",
+    "@builder.io/qwik": "0.0.36",
     "@ngneat/falso": "^6.0.2",
     "@types/eslint": "8.4.2",
     "@types/json-server": "^0.14.4",
