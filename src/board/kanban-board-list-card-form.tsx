@@ -7,7 +7,7 @@ export interface CardProps {
 }
 
 export const KanbanBoardListCardForm = component$((props: CardProps) => {
-  const cardDraft: CardDraft = useStore({
+  const store: CardDraft = useStore({
     text: '',
     listId: props.list.id
   })
@@ -16,12 +16,10 @@ export const KanbanBoardListCardForm = component$((props: CardProps) => {
     <Host class="card">
       <input
         type="text"
-        value={cardDraft.text}
-        onKeyUp$={ev =>
-          (cardDraft.text = (ev.target as HTMLInputElement).value)
-        }
+        value={store.text}
+        onKeyUp$={ev => (store.text = (ev.target as HTMLInputElement).value)}
       />
-      <button onClick$={async () => await props.onClickCreate$?.(cardDraft)}>
+      <button onClick$={async () => await props.onClickCreate$?.(store)}>
         Create
       </button>
     </Host>
