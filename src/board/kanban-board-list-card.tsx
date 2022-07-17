@@ -6,15 +6,13 @@ export interface CardProps {
   onClickRemove$?: PropFunction<(card: Card) => void>
 }
 
-export const KanbanBoardListCard = component$(
-  ({ card, onClickRemove$ }: CardProps) => {
-    return (
-      <Host class="card">
-        <p>{card.text}</p>
-        <button onClick$={async () => await onClickRemove$?.(card)}>
-          DELETE
-        </button>
-      </Host>
-    )
-  }
-)
+export const KanbanBoardListCard = component$((props: CardProps) => {
+  return (
+    <Host class="card">
+      <p>{props.card.text}</p>
+      <button onClick$={async () => await props.onClickRemove$?.(props.card)}>
+        DELETE
+      </button>
+    </Host>
+  )
+})
