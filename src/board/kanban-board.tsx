@@ -1,33 +1,56 @@
-import { component$, Host, useServerMount$, useStore } from '@builder.io/qwik'
+import {
+  component$,
+  Host,
+  Resource,
+  useResource$,
+  useStore
+} from '@builder.io/qwik'
+import { randUuid } from '@ngneat/falso'
 import { findListsByBoard, getBoard } from './api'
 import { KanbanBoardList } from './kanban-board-list'
 import { Board, List } from './models'
 
 interface KanbanBoardState {
-  current: Board | null
+  board: Board | null
   lists: List[]
 }
 
 export const KanbanBoard = component$(() => {
-  const store = useStore<KanbanBoardState>({
-    current: null,
-    lists: []
+  const store = useStore({
+    trigger: randUuid()
   })
 
-  useServerMount$(async () => {
-    store.current = await getBoard()
-    store.lists = await findListsByBoard(store.current)
+  const resource = useResource$<KanbanBoardState>(async ({ track }) => {
+    track(store, 'trigger')
+
+    const board = await getBoard()
+    const lists = await findListsByBoard(board)
+
+    return { board, lists }
   })
 
   return (
     <Host>
-      <h1>{store.current?.title}</h1>
+      <button onClick$={() => (store.trigger = randUuid())}>Reload</button>
 
-      <div className="kanban-board__lists">
-        {store.lists.map(list => (
-          <KanbanBoardList key={list.id} list={list}></KanbanBoardList>
-        ))}
-      </div>
+      <Resource
+        resource={resource}
+        onPending={() => <div>Preparing your Board</div>}
+        onRejected={reason => <div>Oops, {reason}</div>}
+        onResolved={result => {
+          return (
+            <>
+              <h1>{result.board?.title}</h1>
+
+              <div className="kanban-board__lists">
+                {result.lists.map(list => (
+                  <KanbanBoardList key={list.id} list={list}></KanbanBoardList>
+                ))}
+              </div>
+            </>
+          )
+        }}
+      ></Resource>
     </Host>
   )
 })
