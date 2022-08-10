@@ -1,10 +1,4 @@
-import {
-  $,
-  component$,
-  Host,
-  useServerMount$,
-  useStore
-} from '@builder.io/qwik'
+import { $, component$, Host, Resource, useResource$ } from '@builder.io/qwik'
 import { createCard, findCardsByList, removeCard } from './api'
 import { KanbanBoardListCard } from './kanban-board-list-card'
 import { KanbanBoardListCardForm } from './kanban-board-list-card-form'
@@ -19,19 +13,15 @@ interface KanbanListProps {
 }
 
 export const KanbanBoardList = component$((props: KanbanListProps) => {
-  const store = useStore<KanbanListState>({
-    cards: []
+  const resource = useResource$(() => {
+    return findCardsByList(props.list)
   })
 
-  useServerMount$(async () => {
-    store.cards = await findCardsByList(props.list)
-  })
-
-  const removeTodoFromList = $(async (card: Card) => {
+  const removeTodoFromList$ = $(async (card: Card) => {
     await removeCard(card)
   })
 
-  const createCardFromDraft = $(async (cardDraft: CardDraft) => {
+  const createCardFromDraft$ = $(async (cardDraft: CardDraft) => {
     await createCard(cardDraft)
   })
 
@@ -42,19 +32,28 @@ export const KanbanBoardList = component$((props: KanbanListProps) => {
       <KanbanBoardListCardForm
         list={props.list}
         onClickCreate$={async cardDraft =>
-          await createCardFromDraft.invoke(cardDraft)
+          await createCardFromDraft$(cardDraft)
         }
       ></KanbanBoardListCardForm>
 
-      {store.cards.map(card => (
-        <KanbanBoardListCard
-          key={card.id}
-          card={card}
-          onClickRemove$={async cardForRemoval =>
-            await removeTodoFromList.invoke(cardForRemoval)
-          }
-        ></KanbanBoardListCard>
-      ))}
+      <Resource
+        resource={resource}
+        onPending={() => <div>Preparing your Board</div>}
+        onRejected={reason => <div>Oops, {reason}</div>}
+        onResolved={result => (
+          <>
+            {result.map(card => (
+              <KanbanBoardListCard
+                key={card.id}
+                card={card}
+                onClickRemove$={async cardForRemoval =>
+                  await removeTodoFromList$(cardForRemoval)
+                }
+              ></KanbanBoardListCard>
+            ))}
+          </>
+        )}
+      ></Resource>
     </Host>
   )
 })
